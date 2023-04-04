@@ -1,9 +1,20 @@
 #include <Arduino.h>
+#include <Scheduler.h>
+
+#define LED_PIN 13
+
+Scheduler scheduler;
+Led* led;
+RollerShutter* rollerShutter;
 
 void setup() {
-  // put your setup code here, to run once:
+  led = new Led(LED_PIN);
+  rollerShutter = new RollerShutter(12);
+  scheduler = new Scheduler();
+  pinMode(LED_PIN, OUTPUT);
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  scheduler.run();
 }

@@ -5,18 +5,20 @@
 #include "Task.h"
 #include "Led.h"
 #include "RollerShutter.h"
+#include "MsgService.h"
 
 class RoomTask: public Task
 {
 public:
-    RoomTask();
+    RoomTask(Led* led, RollerShutter* rollerShutter, MsgService* msgService);
     void init();
     void run();
     String toString();
 
 private:
-    Led* led;
-    RollerShutter* rollerShutter;
+    Led* _led;
+    RollerShutter* _rollerShutter;
+    MsgService* _msgService;
 };
 
 #endif

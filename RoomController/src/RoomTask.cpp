@@ -1,37 +1,49 @@
-#include <Arduino.h>
-#include "Task.h"
-#include "Led.h"
-#include "RollerShutter.h"
-#include "MsgService.h"
 #include "RoomTask.h"
+#include "MsgService.h"
 
-RoomTask::RoomTask(Led* led, RollerShutter* rollerShutter, MsgService* msgService)
+SmartRoom::RoomTask(Led *l, RollerShutter *r)
 {
-    _led = led;
-    _rollerShutter = rollerShutter;
-    _msgService = msgService;
+    led = l;
+    rBlind = r;
 }
 
-RoomTask::init()
+void RoomTask::init(int period)
 {
-    _led->init();
+    Task::init(period);
+    MsgServiceBT.init();
+    MsgService.init();
 }
 
-RoomTask::run()
+void RoomTask::tick()
 {
-    _msgService->readSerial();
-    Msg* msg = _msgService->reciveMsg();
-    if(msg != NULL)
+
+    if (MsgServiceBT.isMsgAvailable())
     {
-        String msgstr = msg->getMsg();
-        st
-        _led->setState(msg->getLedState());
-        _rollerShutter->setAngle(msg->getAngle());
-        _msgService->sendMsg(_led->getState(), _rollerShutter->getAngle());
+        Msg *msg = MsgServiceBT.receiveMsg();
+        updateRoom(msg);
+        delete msg;
     }
+    if (MsgService.isMsgAvailable())
+    {
+        Msg *msg = MsgService.receiveMsg();
+        updateRoom(msg);
+        delete msg;
+    }
+    readSerialMessage(true, true);
 }
 
-RoomTask::toString()
+void RoomTask::updateRoom(Msg *msg)
 {
-    return "RoomTask";
+    String command = msg->getContent();
+    DeserializationError error = deserializeJson(doc, command);
+    if (error)
+    {
+        Serial.println(error.c_str());
+        return;
+    }
+    if (doc.containsKey("light"))
+    {
+        digitalWrite(13, doc["light"] == 1 ? HIGH : LOW);
+    }
+    Serial.println(command);
 }

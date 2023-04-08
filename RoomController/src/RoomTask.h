@@ -7,18 +7,16 @@
 #include "RollerShutter.h"
 #include "MsgService.h"
 
-class RoomTask: public Task
-{
-public:
-    RoomTask(Led* led, RollerShutter* rollerShutter, MsgService* msgService);
-    void init();
-    void run();
-    String toString();
-
-private:
-    Led* _led;
-    RollerShutter* _rollerShutter;
-    MsgService* _msgService;
+class RoomTask : public Task {
+    public:
+        RoomTask(Led* l, RollerShutter* r);
+        void tick();
+        void init(int period);
+        void updateRoom(Msg* msg);
+    private:
+        Led* led;
+        rBlinds* rBlind;
+        DynamicJsonDocument doc = DynamicJsonDocument(256);
 };
 
 #endif

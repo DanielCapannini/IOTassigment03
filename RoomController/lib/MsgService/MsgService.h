@@ -1,24 +1,54 @@
-#ifdef _MSGSERVICE_
-#define _MSGSERVICE_
+#ifndef __MSGSERVICE__
+#define __MSGSERVICE__
 
-#include <Arduino.h>
-#include "Msg.h"
+#include "Arduino.h"
 
-class MsgService
-{
+class Msg {
+  String content;
+
 public:
-    MsgService();
-    void sendMsg(bool ledState, int angle);
-    Msg getMsg();
-    String toString();
-    void readSerial();
-    bool isMsgAvailable();
-    Msg* receveMsg();
-    Msg* currentMsg;
-    bool messageAvailable;
-
-private:
-    String _msg;
+  Msg(String content){
+    this->content = content;
+  }
+  
+  String getContent(){
+    return content;
+  }
 };
+
+class MsgServiceSerial {
+    
+public: 
+  
+  Msg* currentMsg;
+  bool msgAvailable;
+
+  void init();  
+
+  bool isMsgAvailable();
+  Msg* receiveMsg();
+
+  void sendMsg(const String& msg);
+};
+
+class MsgServiceBluetooth {
+    
+public: 
+
+  Msg* currentMsg;
+  bool msgAvailable;
+
+  void init();  
+
+  bool isMsgAvailable();
+  Msg* receiveMsg();  
+ 
+  void sendMsg(const String& msg);
+};
+
+void readSerialMessage(bool useBT, bool useSerial);
+
+extern MsgServiceSerial MsgService;
+extern MsgServiceBluetooth MsgServiceBT;
 
 #endif

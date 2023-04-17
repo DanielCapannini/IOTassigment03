@@ -1,6 +1,3 @@
-#ifdef _SHEDULER_
-#define _SHEDULER_
-
 #include <Arduino.h>
 #include "Task.h"
 
@@ -19,5 +16,3 @@ public:
     void run();
     String toString();
 };
-
-#endif

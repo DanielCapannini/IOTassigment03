@@ -24,3 +24,11 @@ def sendArduino(lightMes, windowMes):
 
 
 s = serial.Serial("COM3", 9600, timeout=1)
+
+url_bashboard = "http://localhost/IOTssigment03/RoomDashboard/index.php"
+
+#loop
+
+while True:
+    readArduino()
+    

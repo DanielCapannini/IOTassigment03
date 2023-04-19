@@ -5,14 +5,6 @@ Scheduler::Scheduler()
     _taskCount = 0;
 }
 
-void Scheduler::init()
-{
-    for (int i = 0; i < _taskCount; i++)
-    {
-        _tasks[i]->init();
-    }
-}
-
 void Scheduler::addTask(Task* task)
 {
     if (_taskCount < MAX_TASKS)

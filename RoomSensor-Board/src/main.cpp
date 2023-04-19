@@ -7,10 +7,10 @@
 #include "Scheduler.h"
 #include <WiFi.h>
 
-const char* ssid = "";
-const char* password = "";
-const char* mqtt_server = "";
-const char* topic = "";
+const char* ssid = "DIGOS";
+const char* password = "Daniel12";
+const char* mqtt_server = "broker.mqtt-dashboard.com";
+const char* topic = "occupance";
 
 pir* p = new pir(19);
 Led* l = new Led(18);
@@ -33,7 +33,6 @@ void setup() {
   Serial.begin(115200);
   p->initialize();
   l->init();
-  s->init();
   s->addTask(t);
   setup_wifi();
   randomSeed(micros());

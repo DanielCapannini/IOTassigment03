@@ -6,8 +6,6 @@
 class Task
 {
 public:
-    Task();
-    virtual void init();
     virtual void run();
     virtual String toString();
     

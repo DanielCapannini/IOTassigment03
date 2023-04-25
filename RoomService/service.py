@@ -98,10 +98,10 @@ espclient.loop_start()
 while True:
     bashborad = request.get(url_bashboard)
     data = bashborad.json()
-    if(data["light"] == 1):
+    if(data["luce"] == 1):
         lightStatus = 1
-    if(data["window"] != windowStatus):
-        windowStatus = data["window"]
+    if(data["tapparelle"] != windowStatus):
+        windowStatus = data["tapparelle"]
     readArduino()
     sendArduino()
     time.sleep(1)

@@ -10,6 +10,7 @@ class Scheduler
 
 public:
     Scheduler();
+    void init();
     void addTask(Task* task);
     void removeTask(Task* task);
     void run();

@@ -9,7 +9,6 @@ mainTask::mainTask(pir* p, Led* l, photoresistor* ph, PubSubClient* client, cons
 }
 
 void mainTask::init() {
-    Task::init();
 }
 
 void mainTask::run() {
@@ -21,7 +20,7 @@ void mainTask::run() {
     char buffer[256];
     serializeJson(doc, buffer);
     client->publish(this->topic, buffer);
-
+    Serial.println(buffer);
 
     if(p->getState()){
         l->switchOn();

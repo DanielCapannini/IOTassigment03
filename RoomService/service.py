@@ -38,7 +38,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("occupance", qos=1)
 
 def on_message(client, userdata, msg):
-    global lightStatus, windowStatus, url_bashboard
+    global lightStatus, windowStatus, url_bashboard_post
     message = msg.payload.decode("utf-8")
     print(message)
     a = json.loads(message)
@@ -52,7 +52,7 @@ def on_message(client, userdata, msg):
                 "time": t,
                 },
             }
-        request.post(url_bashboard, json=mes)
+        request.post(url_bashboard_post, json=mes)
     if a["isMotion"] == 1 and datetime.now().hour >= 8 and windowStatus == 0:
         windowStatus=180
         mes = {
@@ -62,7 +62,7 @@ def on_message(client, userdata, msg):
                 "time": t,
                 },
             }
-        request.post(url_bashboard, json=mes)
+        request.post(url_bashboard_post, json=mes)
     if a["isMotion"] == 0 and windowStatus>0 and datetime.now().hour < 8 and datetime.now().hour >= 19:
         windowStatus=0
         mes = {
@@ -72,6 +72,7 @@ def on_message(client, userdata, msg):
                 "time": t,
                 },
             }
+        request.post(url_bashboard_post, json=mes)
     if a["isMotion"] == 1 and lightStatus == 1:
         lightStatus = 0
         mes = {
@@ -81,13 +82,15 @@ def on_message(client, userdata, msg):
                 "time": t,
                 },
             }
+        request.post(url_bashboard_post, json=mes)
     sendArduino() 
         
 lightStatus = 0
 windowStatus = 0
 s = serial.Serial("COM3", 9600, timeout=1)
 s.close()
-url_bashboard = "http://localhost/IOTssigment03/RoomDashboard/index.php"
+url_bashboard_get = "http://localhost/IOTssigment03/RoomDashboard/room-dashboard-window.php"
+url_bashboard_post = "http://localhost/IOTssigment03/RoomDashboard/room-dashboard-history.php"
 espclient = paho.Client()
 espclient.on_connect = on_connect
 espclient.on_subscribe = on_subscribe
@@ -96,7 +99,7 @@ espclient.connect("broker.hivemq.com", 1883)
 espclient.loop_start()
 
 while True:
-    bashborad = request.get(url_bashboard)
+    bashborad = request.get(url_bashboard_get)
     data = bashborad.json()
     if(data["luce"] == 1):
         lightStatus = 1

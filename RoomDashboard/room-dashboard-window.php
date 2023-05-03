@@ -1,9 +1,10 @@
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $jsonContent = json_decode(file_get_contents("logs.json"), true);
-    $data["window"] = end($jsonContent["data"]["window-log"])["status"];
-    $data["lights"] = end($jsonContent["data"]["lights-log"])["status"];
+    $jsonContent1 = json_decode(file_get_contents("window.json"), true);
+    $jsonContent2 = json_decode(file_get_contents("lights.json"), true);
+    $data["window"] = end($jsonContent1["window"])["status"];
+    $data["lights"] = end($jsonContent2["lights"])["status"];
     header("Content-Type: application/json; charset=UTF-8");
     echo json_encode($data);
 }

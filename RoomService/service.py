@@ -7,7 +7,7 @@ Created on Wed Apr 19 11:27:17 2023
 import  json, serial, time
 import paho.mqtt.client as paho
 from datetime import datetime
-import requests as request
+import requests as request2
 
 def on_subscribe(client, userdata, mid, granted_qos):
     print("Subscribed: " + str(mid) + " " + str(granted_qos))
@@ -25,56 +25,47 @@ def on_message(client, userdata, msg):
     
 def control():
     global lightStatus, windowStatus, url_bashboard_post, movimento
-    t = datetime.now().strftime("%H:%M:%S")
     if movimento == 1 and lightStatus == 0:
         lightStatus = 1
         mes = {
-            "type": "luce",
-            "date":{
-                "state": lightStatus,
-                "time": t,
-                },
+            "type": "lights",
+            "state": lightStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
             }
-        request.post(url_bashboard_post, json=mes)
-    if movimento == 1 and datetime.now().hour >= 8 and windowStatus == 0:
+        request2.post(url_bashboard_post, json=mes)
+    if movimento == 1 and datetime.now().hour >= 8 and int(windowStatus) == 0:
         windowStatus=100
         mes = {
-            "type": "finestra",
-            "date":{
-                "state": windowStatus,
-                "time": t,
-                },
+            "type": "window",
+            "state": windowStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
             }
-        request.post(url_bashboard_post, json=mes)
-    if movimento == 0 and windowStatus>0 and datetime.now().hour < 8 and datetime.now().hour >= 19:
+        request2.post(url_bashboard_post, json=mes)
+    if movimento == 0 and int(windowStatus)>0 and (datetime.now().hour < 8 or datetime.now().hour >= 19):
         windowStatus=0
         mes = {
-            "type": "finestra",
-            "date":{
-                "state": windowStatus,
-                "time": t,
-                },
+            "type": "window",
+            "state": windowStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
             }
-        request.post(url_bashboard_post, json=mes)
+        request2.post(url_bashboard_post, json=mes)
     if movimento == 1 and lightStatus == 1:
         lightStatus = 0
         mes = {
-            "type": "luce",
-            "date":{
-                "state": lightStatus,
-                "time": t,
-                },
+            "type": "lights",
+            "state": lightStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
             }
-        request.post(url_bashboard_post, json=mes)
+        request2.post(url_bashboard_post, json=mes)
     
   
 luminosita = 0
 movimento = 0
 lightStatus = 0
 windowStatus = 0
-url_bashboard_get = "http://localhost/IOTssigment03/RoomDashboard/room-dashboard-window.php"
-url_bashboard_post = "http://localhost/IOTssigment03/RoomDashboard/room-dashboard-history.php"
-s = serial.Serial("COM6", 9600)
+url_bashboard_get = "http://localhost/IOTassigment03/RoomDashboard/room-dashboard-window.php"
+url_bashboard_post = "http://localhost/IOTassigment03/RoomDashboard/room-post.php"
+s = serial.Serial("COM5", 9600)
 espclient = paho.Client()
 espclient.on_connect = on_connect
 espclient.on_subscribe = on_subscribe
@@ -88,16 +79,39 @@ while True:
     line = s.readline().decode('utf-8')
     print(line)
     json_obj = json.loads(line)
-    lightStatus = json_obj['Light']
-    windowStatus = json_obj['Servo']
-    print(luminosita , " " ,  movimento, " ", lightStatus, " ", windowStatus)
-    bashborad = request.get(url_bashboard_get)
-    data = bashborad.json()
-    if(data["luce"] == 1):
-        lightStatus = 1
-    if(data["tapparelle"] != windowStatus):
-        windowStatus = data["tapparelle"]
-    control()
+    if json_obj['Light'] != lightStatus:
+        lightStatus = bool(json_obj['Light'])
+        mes = {
+            "type": "lights",
+            "state": lightStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
+            }
+        response = request2.post(url_bashboard_post, data=mes)
+        if response.status_code == 200:
+            content = response.content
+            print(content)
+    elif json_obj['Servo'] != windowStatus:
+        windowStatus = int(json_obj['Servo'])
+        mes = {
+            "type": "window",
+            "state": windowStatus,
+            "start": datetime.now().strftime("%H:%M:%S")
+            }
+        response = request2.post(url_bashboard_post, data=mes)
+        if response.status_code == 200:
+            content = response.content
+            print(content)
+    else:
+        bashborad = request2.get(url_bashboard_get)
+        if bashborad.status_code == 200:
+            data = bashborad.json()
+            print("get:  ", data)
+            if data["lights"] == "False":
+                lightStatus = False
+            else:
+                lightStatus = True
+        windowStatus=data["window"]
+        control()
     dt = {}
     dt["light"] = lightStatus
     dt["window"] = windowStatus
@@ -105,4 +119,3 @@ while True:
     s.write(dt.encode())
     s.write(b'\n')
     time.sleep(0.2)
-    control()

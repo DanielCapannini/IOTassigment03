@@ -60,63 +60,31 @@ window.onload = function () {
   .then(response => response.json())
   .then(data => {
     const datiGrafico = data.lights;
+    console.log(datiGrafico);
 
-    const labels = datiGrafico.map(item => item.start);
-    const dati = datiGrafico.map((item, index) => ({
-      x: item.start,
-      y: item.status === 'True' ? 1 : 0,
-      end: index < datiGrafico.length - 1 ? datiGrafico[index+1].start : null
-    }));
+    // Ordina gli oggetti per orario di inizio
+    //datiGrafico.sort((a, b) => (a.start > b.start) ? 1 : -1);
 
-    const canvas = document.getElementById('grafico');
-    const ctx = canvas.getContext('2d');
+    let tempoFalse = 0;
+    let tempoTrue = 0;
+    let lastEnd = null;
 
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Stato luci',
-          data: dati,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1,
-          fill: false
-        }]
-      },
-      options: {
-        scales: {
-          xAxes: [{
-            type: 'time',
-            time: {
-              unit: 'second'
-            }
-          }],
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              max: 1,
-              callback: function(value, index, values) {
-                return value == 1 ? 'Acceso' : 'Spento';
-              }
-            }
-          }]
-        },
-        tooltips: {
-          callbacks: {
-            label: function(tooltipItem, data) {
-              const dato = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-              return dato.y == 1 ? 'Acceso' : 'Spento';
-            }
-          }
-        },
-        plugins: {
-          filler: {
-            propagate: true
-          }
+    datiGrafico.forEach(item => {
+      if (lastEnd !== null) {
+        console.log(item.start);
+        console.log(new o(item.start));
+        const durata = new Date(item.start) - new Date(lastEnd);
+        if (item.status === 'False') {
+          tempoFalse += durata;
+        } else {
+          tempoTrue += durata;
         }
       }
+      lastEnd = item.start;
     });
+
+    console.log('Tempo False:', tempoFalse);
+    console.log('Tempo True:', tempoTrue);
   })
   .catch(error => {
     console.error(error);

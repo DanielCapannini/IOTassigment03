@@ -1,15 +1,15 @@
 {
     "lights": [
         {
-            "status": "False",
+            "state": "False",
             "start": "00:00:00"
         },
         {
-            "status": "True",
+            "state": "True",
             "start": "00:26:45"
         },
         {
-            "status": "False",
+            "state": "False",
             "start": "00:26:50"
         },
         {

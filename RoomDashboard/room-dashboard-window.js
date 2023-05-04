@@ -84,7 +84,9 @@ function updateWindow(value) {
         },
         type: "window",
     }
-    axios.post("room-dashboard-history.php", request).then()
+    axios.post("room-dashboard-history.php", request).then(response => {
+        console.log(response)
+    })
 }
 
 function checkLights(isLightsOn) {

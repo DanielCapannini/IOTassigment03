@@ -1,1 +1,64 @@
-"start"
+{
+    "lights": [
+        {
+            "status": "False",
+            "start": "00:00:00"
+        },
+        {
+            "status": "True",
+            "start": "00:26:45"
+        },
+        {
+            "status": "False",
+            "start": "00:26:50"
+        },
+        {
+            "state": "True",
+            "start": "00:27:04"
+        },
+        {
+            "state": "False",
+            "start": "11:14:41"
+        },
+        {
+            "state": "False",
+            "start": "11:14:45"
+        },
+        {
+            "state": "False",
+            "start": "11:15:03"
+        },
+        {
+            "state": "False",
+            "start": "11:20:52"
+        },
+        {
+            "state": "False",
+            "start": "11:20:55"
+        },
+        {
+            "state": "False",
+            "start": "11:20:57"
+        },
+        {
+            "state": "False",
+            "start": "11:21:03"
+        },
+        {
+            "state": "True",
+            "start": "11:23:12"
+        },
+        {
+            "state": "False",
+            "start": "11:23:17"
+        },
+        {
+            "state": "True",
+            "start": "11:23:33"
+        },
+        {
+            "state": "False",
+            "start": "15:31:38"
+        }
+    ]
+}

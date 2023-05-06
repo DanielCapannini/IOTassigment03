@@ -59,37 +59,52 @@ window.onload = function () {
     fetch('lights.json')
   .then(response => response.json())
   .then(data => {
-    const datiGrafico = data.lights;
-    console.log(datiGrafico);
-
-    // Ordina gli oggetti per orario di inizio
-    //datiGrafico.sort((a, b) => (a.start > b.start) ? 1 : -1);
-
-    let tempoFalse = 0;
-    let tempoTrue = 0;
-    let lastEnd = null;
-
-    datiGrafico.forEach(item => {
-      if (lastEnd !== null) {
-        console.log(item.start);
-        console.log(new o(item.start));
-        const durata = new Date(item.start) - new Date(lastEnd);
-        if (item.status === 'False') {
-          tempoFalse += durata;
-        } else {
-          tempoTrue += durata;
-        }
-      }
-      lastEnd = item.start;
-    });
-
-    console.log('Tempo False:', tempoFalse);
-    console.log('Tempo True:', tempoTrue);
-  })
-  .catch(error => {
-    console.error(error);
+    let durations = {
+        "accensione": 0,
+        "spegnimento": 0
+      };
+      
+      data.lights.forEach(light => {
+        if(light.end != undefined){
+        let start = parseDateTime(light.start);
+        let end = parseDateTime(light.end);
+        let duration = end.getTime() - start.getTime();
+      
+        if (light.state === "True") {
+          durations.accensione += duration;
+        } 
+        if (light.state === "False") {
+          durations.spegnimento += duration;
+        }}
+      });
+      
+      let totalTime = durations.accensione + durations.spegnimento;
+      let ctx = document.getElementById('myChart').getContext('2d');
+let myChart = new Chart(ctx, {
+  type: 'pie',
+  data: {
+    labels: ['acceso', 'spento'],
+    datasets: [{
+      data: [durations.accensione, durations.spegnimento],
+      backgroundColor: ['#07ff03', '#ed0707']
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: `Totale tempo di accensione e spegnimento: ${totalTime} ms`
+    }
+  }
+});
   });
 }
+
+function parseDateTime(dateTimeString) {
+    let dateTimeParts = dateTimeString.split(' ');
+    let dateParts = dateTimeParts[0].split('-');
+    let timeParts = dateTimeParts[1].split(':');
+    return new Date(dateParts[0], dateParts[1] - 1, dateParts[2], timeParts[0], timeParts[1], timeParts[2]);
+  }
 
 function slideRollerBlinds(value) {
     
@@ -114,6 +129,7 @@ function updateWindow(value) {
 
 function setupSlicer() {
     return axios.get("window.json").then((response) => {
+        console.log(response)
         let windowData = response.data["window"]
         slider.setAttribute("value", windowData[windowData.length - 1].state)
     })

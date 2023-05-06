@@ -1,6 +1,4 @@
 <?php
-$data = json_decode(file_get_contents("php://input"), true);
-var_dump($data);
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $jsonContent1 = json_decode(file_get_contents("window.json"), true);
     $jsonContent2 = json_decode(file_get_contents("lights.json"), true);

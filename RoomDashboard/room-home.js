@@ -97,6 +97,66 @@ let myChart = new Chart(ctx, {
   }
 });
   });
+
+  fetch('lights.json')
+  .then(response => response.json())
+  .then(data => {
+    let accensioniPerOra = Array(24).fill(0);
+
+data.lights.forEach(light => {
+    if(light.end != undefined){
+  let start = parseDateTime(light.start);
+  let end = parseDateTime(light.end);
+  let duration = end.getTime() - start.getTime();
+
+  if (light.state === "True") {
+    let startHour = start.getHours();
+    let endHour = end.getHours();
+
+    if (startHour === endHour) {
+      accensioniPerOra[startHour] += duration;
+    } else {
+      for (let h = startHour; h <= endHour; h++) {
+        if (h === startHour) {
+          accensioniPerOra[h] += (3600000 - start.getMinutes() * 60000 - start.getSeconds() * 1000 - start.getMilliseconds());
+        } else if (h === endHour) {
+          accensioniPerOra[h] += (end.getMinutes() * 60000 + end.getSeconds() * 1000 + end.getMilliseconds());
+        } else {
+          accensioniPerOra[h] += 3600000;
+        }
+      }
+    }
+  }}
+});
+let ctx = document.getElementById('myChart2').getContext('2d');
+let myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: Array.from(Array(24), (_, i) => i.toString()),
+    datasets: [{
+      label: 'Durata accensione luce per ora',
+      data: accensioniPerOra,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
+    title: {
+      display: true,
+      text: 'Durata accensione luce per ora'
+    }
+  }
+});
+  });
+  console.log("ciao")
 }
 
 function parseDateTime(dateTimeString) {

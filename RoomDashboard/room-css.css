@@ -28,10 +28,17 @@ body {
   .canvas{
     background-color: #fff;
     font-family: Arial, sans-serif;
-    width: 47%;
+    width: 97%;
     margin: 10px;
     padding: 10px;
     border-radius: 5px;
+  }
+
+  .myChart{
+    width: 45%;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px;
   }
   
   /* Impostazione del colore del pulsante di input */

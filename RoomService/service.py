@@ -30,7 +30,7 @@ def control():
         mes = {
             "type": "lights",
             "state": lightStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         request2.post(url_bashboard_post, json=mes)
     if movimento == 1 and datetime.now().hour >= 8 and int(windowStatus) == 0:
@@ -38,7 +38,7 @@ def control():
         mes = {
             "type": "window",
             "state": windowStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         request2.post(url_bashboard_post, json=mes)
     if movimento == 0 and int(windowStatus)>0 and (datetime.now().hour < 8 or datetime.now().hour >= 19):
@@ -46,7 +46,7 @@ def control():
         mes = {
             "type": "window",
             "state": windowStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         request2.post(url_bashboard_post, json=mes)
     if movimento == 1 and lightStatus == 1:
@@ -54,7 +54,7 @@ def control():
         mes = {
             "type": "lights",
             "state": lightStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         request2.post(url_bashboard_post, json=mes)
     
@@ -84,18 +84,18 @@ while True:
         mes = {
             "type": "lights",
             "state": lightStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         response = request2.post(url_bashboard_post, data=mes)
         if response.status_code == 200:
             content = response.content
             print(content)
-    elif json_obj['Servo'] != windowStatus:
+    elif int(json_obj['Servo']) != int(windowStatus):
         windowStatus = int(json_obj['Servo'])
         mes = {
             "type": "window",
             "state": windowStatus,
-            "start": datetime.now().strftime("%H:%M:%S")
+            "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         response = request2.post(url_bashboard_post, data=mes)
         if response.status_code == 200:
@@ -110,7 +110,7 @@ while True:
                 lightStatus = False
             else:
                 lightStatus = True
-        windowStatus=data["window"]
+        windowStatus=int(data["window"])
         control()
     dt = {}
     dt["light"] = lightStatus

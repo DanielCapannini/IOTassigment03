@@ -1,23 +1,20 @@
-#ifdef _SHEDULER_
-#define _SHEDULER_
+#ifndef __SCHEDULER__
+#define __SCHEDULER__
 
-#include <Arduino.h>
 #include "Task.h"
 
 #define MAX_TASKS 10
 
-class Scheduler
-{
-    Task* _tasks[MAX_TASKS];
-    int _taskCount;
+class Scheduler {
+  unsigned long period;
+  int taskTot;
+  Task* taskList[MAX_TASKS];
+  unsigned long tempo;
 
 public:
-    Scheduler();
-    void init();
-    void addTask(Task* task);
-    void removeTask(Task* task);
-    void run();
-    String toString();
+  void init(unsigned long period);
+  virtual bool addTask(Task* task);
+  virtual void run();
 };
 
 #endif

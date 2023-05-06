@@ -1,37 +1,24 @@
-#include "led.h"
+#include "Led.h"
 
-Led::Led(int pin)
-{
-    _pin = pin;
-    _isOn = false;
+Led::Led(int pin) : state(OFF) {
+  pin_=pin;
+  pinMode(pin_, OUTPUT);
 }
 
-void Led::init()
-{
-    pinMode(_pin, OUTPUT);
-    switchOff();
+void Led::switchOn() {
+  if (this->state != Led::ON) {
+    this->state = Led::ON;
+    digitalWrite(pin_, HIGH);
+  }
 }
 
-void Led::switchOn()
-{
-    digitalWrite(_pin, HIGH);
-    _isOn = true;
+void Led::switchOff() {
+  if (this->state != Led::OFF) {
+    this->state = Led::OFF;
+    digitalWrite(pin_, LOW);
+  }
 }
 
-void Led::switchOff()
-{
-    digitalWrite(_pin, LOW);
-    _isOn = false;
+bool Led::isOn() {
+  return Led::state == ON;
 }
-
-bool Led::isOn()
-{
-    return _isOn;
-}
-
-String Led::toString()
-{
-    return String(_pin) + " " + String(_isOn);
-}
-
-// Path: RoomController\lib\led\led.h

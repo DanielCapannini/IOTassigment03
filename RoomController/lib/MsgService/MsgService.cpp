@@ -1,98 +1,55 @@
 #include "Arduino.h"
 #include "MsgService.h"
-#include "SoftwareSerial.h"
+#include "ArduinoJson.h"
 
-#define RX_PIN 2  // to be connected to TX of the BT module
-#define TX_PIN 3  // to be connected to RX of the BT module
-
-String content;
-SoftwareSerial channel(RX_PIN, TX_PIN);
-
-MsgServiceSerial MsgService;
-MsgServiceBluetooth MsgServiceBT;
-
-bool MsgServiceSerial::isMsgAvailable(){
-  return msgAvailable;
-}
-
-Msg* MsgServiceSerial::receiveMsg(){
-  if (msgAvailable){
-    Msg* msg = currentMsg;
-    msgAvailable = false;
-    currentMsg = NULL;
-    content = "";
-    return msg;  
-  } else {
-    return NULL; 
-  }
-}
-
-void MsgServiceSerial::init(){
-  content.reserve(128);
-  content = "";
-  currentMsg = NULL;
-  msgAvailable = false;  
-}
-
-void MsgServiceSerial::sendMsg(const String& msg){
-  Serial.println(msg);  
-}
-
-bool MsgServiceBluetooth::isMsgAvailable(){
-  return msgAvailable;
-}
-
-Msg* MsgServiceBluetooth::receiveMsg(){
-  if (msgAvailable){
-    Msg* msg = currentMsg;
-    msgAvailable = false;
-    currentMsg = NULL;
-    content = "";
-    return msg;  
-  } else {
-    return NULL; 
-  }
-}
-
-void MsgServiceBluetooth::init(){
-  channel.begin(9600);
-  content.reserve(128);
-  content = "";
-  currentMsg = NULL;
-  msgAvailable = false;  
-}
-
-void MsgServiceBluetooth::sendMsg(const String& msg){
-  channel.println(msg);  
-}
-
-
-void readSerialMessage(bool useBT, bool useSerial){
-  if(useSerial){
-    while (Serial.available()) {
-      char ch = (char) Serial.read();
-      if (ch == '\n'){      
-        if (content.length() > 0) {
-            MsgService.currentMsg = new Msg(content);
-            MsgService.msgAvailable = true;
-        }
-      } else {
-        content += ch;      
-      }
-    }
-  }
-  if(useBT){
-    while (channel.available()) {
-      char ch = (char) channel.read();
-      if (ch == '\n'){   
-        if (content.length() > 0) {
-            content.trim();
-            MsgServiceBT.currentMsg = new Msg(content);
-            MsgServiceBT.msgAvailable = true;
-        }
-      } else {
-        content += ch;      
-      }
+void MsgService::readSerial() {
+   while(Serial.available()) {
+    char ch = (char)Serial.read();
+    if (ch == '\n') {
+      this->currentMsg = new Msg(this->content);
+      this->messageAvailable = true;
+    } else {
+      this->content += ch;
     }
   }
 }
+
+void MsgService::init() {
+    Serial.begin(9600);
+    while (!Serial) {}
+    this->content.reserve(256);
+    this->content = "";
+    this->currentMsg = NULL;
+    this->messageAvailable = false;
+}
+
+void MsgService::sendMsg(bool ledState, int servoOpening) {
+    DynamicJsonDocument doc(200);
+    doc["Light"] = ledState;
+    doc["Servo"] = servoOpening;
+    serializeJson(doc, Serial);
+    Serial.println();
+    //Serial.print(ledState);
+    //Serial.print(" ");
+    //Serial.println(servoOpening);
+}
+
+void MsgService::sendMsg(String msg) {
+    Serial.println(msg);
+}
+
+bool MsgService::isMessageAvailable() {
+    return this->messageAvailable == true;
+};
+
+Msg* MsgService::receiveMsg() {
+    if (this->isMessageAvailable()) {
+        Msg* msg = this->currentMsg;
+        this->messageAvailable = false;
+        this->currentMsg = NULL;
+        content = "";
+        return msg;
+    } else {
+        return NULL;
+    }
+};

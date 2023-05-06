@@ -2,53 +2,34 @@
 #define __MSGSERVICE__
 
 #include "Arduino.h"
+#include "ArduinoJson.h"
 
 class Msg {
-  String content;
+
+private:
+    String msg;
 
 public:
-  Msg(String content){
-    this->content = content;
-  }
-  
-  String getContent(){
-    return content;
-  }
+    Msg(String content) {
+        this->msg = content;
+    }
+    String getContent() {
+        return this->msg;
+    }
 };
 
-class MsgServiceSerial {
-    
-public: 
-  
-  Msg* currentMsg;
-  bool msgAvailable;
-
-  void init();  
-
-  bool isMsgAvailable();
-  Msg* receiveMsg();
-
-  void sendMsg(const String& msg);
+class MsgService {    
+private:
+    String content;
+public:   
+    void init();  
+    void readSerial();
+    void sendMsg(bool ledState, int servoOpening);
+    void sendMsg(String msg);
+    bool isMessageAvailable();
+    Msg* receiveMsg();
+    Msg* currentMsg;
+    bool messageAvailable;
 };
-
-class MsgServiceBluetooth {
-    
-public: 
-
-  Msg* currentMsg;
-  bool msgAvailable;
-
-  void init();  
-
-  bool isMsgAvailable();
-  Msg* receiveMsg();  
- 
-  void sendMsg(const String& msg);
-};
-
-void readSerialMessage(bool useBT, bool useSerial);
-
-extern MsgServiceSerial MsgService;
-extern MsgServiceBluetooth MsgServiceBT;
 
 #endif

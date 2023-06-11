@@ -32,21 +32,13 @@ void setup_wifi() {
 
 void setup() {
   Serial.begin(115200);
-  Serial.print("prova setup");
   p->initialize();
-  Serial.print("prova setup 1");
   l->init();
-  Serial.print("prova setup 2");
   s->init();
-  Serial.print("prova setup 3");
   s->addTask(t);
-  Serial.print("prova setup 4");
   setup_wifi();
-  Serial.print("prova setup 5");
   randomSeed(micros());
-  Serial.print("prova setup 6");
   client.setServer(mqtt_server, 1883);
-  Serial.print("prova setup 7");
 }
 
 void reconnect() {
@@ -67,7 +59,6 @@ void reconnect() {
 }
 
 void loop() {
-  Serial.print("prova prova");
   if (!client.connected()) {
     reconnect();
   }

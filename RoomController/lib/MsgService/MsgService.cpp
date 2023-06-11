@@ -29,9 +29,6 @@ void MsgService::sendMsg(bool ledState, int servoOpening) {
     doc["Servo"] = servoOpening;
     serializeJson(doc, Serial);
     Serial.println();
-    //Serial.print(ledState);
-    //Serial.print(" ");
-    //Serial.println(servoOpening);
 }
 
 void MsgService::sendMsg(String msg) {

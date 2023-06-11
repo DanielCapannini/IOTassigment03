@@ -34,7 +34,10 @@ void Scheduler::run()
 {
     for (int i = 0; i < _taskCount; i++)
     {
-        _tasks[i]->run();
+        if (_tasks[i]->checkLimit())
+        {
+            _tasks[i]->run();
+        }
     }
 }
 

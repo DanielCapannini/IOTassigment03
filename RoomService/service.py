@@ -49,7 +49,7 @@ def control():
             "start": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             }
         request2.post(url_bashboard_post, json=mes)
-    if movimento == 0 and lightStatus == 1:
+    if movimento == 1 and lightStatus == 1:
         lightStatus = 0
         mes = {
             "type": "lights",

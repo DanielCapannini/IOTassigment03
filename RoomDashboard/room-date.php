@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents("window.json", json_encode($jsonContent1, JSON_PRETTY_PRINT));
     } else {
         $data2=array("state"=>$data["state"],"start"=>$data["start"]);
-        $jsonContent2["window"][count(end($jsonContent2))-1]["end"]=$data["start"];
+        $jsonContent2["lights"][count(end($jsonContent2))-1]["end"]=$data["start"];
         array_push($jsonContent2["lights"], $data2);
         file_put_contents("lights.json", json_encode($jsonContent2, JSON_PRETTY_PRINT));
     }

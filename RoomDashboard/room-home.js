@@ -13,28 +13,34 @@ window.onload = function () {
         console.log(lightSwitch.getAttribute("value"))
         console.log(isLightsOn)
         if (lightSwitch.getAttribute("value") == "on" && !isLightsOn) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = (now.getMonth() + 1).toString().padStart(2, '0');
+          const day = now.getDate().toString().padStart(2, '0');
+          const hours = now.getHours().toString().padStart(2, '0');
+          const minutes = now.getMinutes().toString().padStart(2, '0');
+          const seconds = now.getSeconds().toString().padStart(2, '0');
             const w = {
                 type: "light",
                 state: "True",
-                start: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                }),
+                start: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
             }
             axios.post("room-date.php", w).then(response => {
                 console.log(response)
             })
         }
         else if (lightSwitch.getAttribute("value") == "off" && isLightsOn) {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = (now.getMonth() + 1).toString().padStart(2, '0');
+          const day = now.getDate().toString().padStart(2, '0');
+          const hours = now.getHours().toString().padStart(2, '0');
+          const minutes = now.getMinutes().toString().padStart(2, '0');
+          const seconds = now.getSeconds().toString().padStart(2, '0');
             const w = {
                 type: "light",
                 state: "False",
-                start: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                }),
+                start: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
             }
             axios.post("room-date.php", w).then(response => {
                 console.log(response)
@@ -172,15 +178,18 @@ function slideRollerBlinds(value) {
 
 function updateWindow(value) {
     let a = parseInt(value)
-        const w = {
-            type: "window",
-            state: parseInt(a),
-            start: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-            }),
-        } 
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+      const w = {
+          type: "window",
+          state: parseInt(a),
+          start: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
+      }
         console.log(w)
         axios.post("room-date.php", w).then(response => {
             console.log(response)

@@ -3,17 +3,19 @@
 
 #include <Arduino.h>
 
-class Led {
-  enum {ON, OFF} state;
-  
-  public:
-    Led(int pin); 
+class Led
+{
+public:
+    Led(int pin);
+    void init();
     void switchOn();
     void switchOff();
     bool isOn();
+    String toString();
 
-  private:
-    int pin_;
+private:
+    int _pin;
+    bool _isOn;
 };
 
 #endif

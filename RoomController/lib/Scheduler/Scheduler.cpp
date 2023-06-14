@@ -5,14 +5,14 @@
 
 void Scheduler::init(unsigned long period) {
   this->period = period;
-  taskTot = 0;
+  _taskCount = 0;
   tempo = millis();  
 }
 
 bool Scheduler::addTask(Task* task) {
-  if (taskTot < MAX_TASKS-1) {
-    taskList[taskTot] = task;
-    taskTot++;
+  if (_taskCount < MAX_TASKS-1) {
+    _tasks[_taskCount] = task;
+    _taskCount++;
     return true;
   } else {
     return false; 
@@ -21,9 +21,9 @@ bool Scheduler::addTask(Task* task) {
   
 void Scheduler::run() {   
   while (millis() - tempo < period) {}
-    for (int i = 0; i < taskTot; i++) {
-      if (taskList[i]->updateTime(period)) {
-        taskList[i]->tick();
+    for (int i = 0; i < _taskCount; i++) {
+      if (_tasks[i]->updateTime(period)) {
+        _tasks[i]->tick();
       }
     }
   tempo = millis();

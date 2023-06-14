@@ -5,10 +5,10 @@
 #include "MsgService.h"
 
 
-BluetoothTask::BluetoothTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, int dt) {
+BluetoothTask::BluetoothTask(int rxPin, int txPin, MsgService* msg, SmartRoom* smartRoom, int dt) {
   this->txPin = txPin;
   this->rxPin = rxPin;
-  this->service = service;
+  this->msg = msg;
   this->smartRoom = smartRoom;
   this->dt = dt;
   this->ct = dt;
@@ -49,5 +49,5 @@ void BluetoothTask::tick(){
       this->ct--;
     }
   }
-  service->sendMsg(smartRoom->getLedState(), smartRoom->getServoOpen());
+  msg->sendMsg(smartRoom->getLedState(), smartRoom->getServoOpen());
 }

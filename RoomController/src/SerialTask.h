@@ -9,11 +9,11 @@ class SerialTask : public Task {
   
   public: 
     SmartRoom* room;
-    MsgService* service;
+    MsgService* msg;
     String content; 
     Msg* message;
 
-    SerialTask(SmartRoom* room, MsgService* service);   
+    SerialTask(SmartRoom* room, MsgService* msg);   
 
     
     void init(int period);

@@ -4,14 +4,14 @@
 class Task {
   int currentPeriod;
   int timeElapsed;
-  bool running;
+  bool run;
 
   
 public:
   virtual void init(int period){
     currentPeriod = period;  
     timeElapsed = 0;
-    running = true;
+    run = true;
   }
 
   virtual void tick() = 0;
@@ -27,11 +27,11 @@ public:
   }
 
   bool isRunning(){
-    return running;
+    return run;
   }
 
-  void setRunning(bool running){
-    this->running = running;
+  void setRunning(bool run){
+    this->run = run;
   }
   
 };

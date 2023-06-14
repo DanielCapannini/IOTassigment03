@@ -7,8 +7,8 @@
 
 class Scheduler {
   unsigned long period;
-  int taskTot;
-  Task* taskList[MAX_TASKS];
+  int _taskCount;
+  Task* _tasks[MAX_TASKS];
   unsigned long tempo;
 
 public:

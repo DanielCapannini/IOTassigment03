@@ -12,13 +12,13 @@ class  BluetoothTask: public Task {
   int txPin;
   SoftwareSerial* channel;
   SmartRoom* smartRoom;
-  MsgService* service;
+  MsgService* msg;
 
   int dt;
   int ct;
 
 public:
-  BluetoothTask(int rxPin, int txPin, MsgService* service, SmartRoom* smartRoom, int dt);  
+  BluetoothTask(int rxPin, int txPin, MsgService* msg, SmartRoom* smartRoom, int dt);  
   void init(int period);  
   void tick();
 };

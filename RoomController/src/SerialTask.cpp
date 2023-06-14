@@ -6,9 +6,9 @@
 #include "Task.h"
 #include "ArduinoJson.h"
 
-SerialTask::SerialTask(SmartRoom* smartRoom, MsgService* service) {
+SerialTask::SerialTask(SmartRoom* smartRoom, MsgService* msg) {
   this->room = smartRoom;
-  this->service = service;
+  this->msg = msg;
 } 
 
 void SerialTask::init(int period) {
@@ -16,13 +16,13 @@ void SerialTask::init(int period) {
 }
 
 void SerialTask::write(bool ledState, int servoOpening) {
-  this->service->sendMsg(ledState, servoOpening);
+  this->msg->sendMsg(ledState, servoOpening);
 }
 
 
 void SerialTask::tick() {
-  this->service->readSerial();
-  Msg* msg = this->service->receiveMsg();
+  this->msg->readSerial();
+  Msg* msg = this->msg->receiveMsg();
   if (msg) {
     String content = msg->getContent();
     StaticJsonDocument<64> doc;

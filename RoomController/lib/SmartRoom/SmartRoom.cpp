@@ -3,20 +3,25 @@
 SmartRoom::SmartRoom(ServoMotor* servoMotor, Led* led) : 
   servoMotor(servoMotor), led(led){}
 
-void SmartRoom::setLedState(bool state){
-  if(state){
+void SmartRoom::setLedState(bool state)
+{
+  if(state)
+  {
     led->switchOn();
   }
-  else{
+  else
+  {
     led->switchOff();
   }
 }
 
-bool SmartRoom::getLedState(){
+bool SmartRoom::getLedState()
+{
   return led->isOn();
 }
 
-void SmartRoom::setServoOpen(int percent){
+void SmartRoom::setServoOpen(int percent)
+{
   servoMotor->open(percent);
 }
 

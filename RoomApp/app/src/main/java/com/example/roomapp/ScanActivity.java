@@ -32,17 +32,12 @@ public class ScanActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_SCAN = 759;
     private static final int LEGACY_REQUEST_PERMISSION_BLUETOOTH = 555;
     private static final int REQUEST_PERMISSION_ADMIN = 556;
-
     public static final String X_BLUETOOTH_DEVICE_EXTRA = "X_BLUETOOTH_DEVICE_EXTRA";
-
-
     private final List<BluetoothDevice> scannedDevices = new ArrayList<>();
     private final List<String> scannedNameList = new ArrayList<>();
-
     private final List<BluetoothDevice> pairedDevices = new ArrayList<>();
     private final List<String> pairedNameList = new ArrayList<>();
     private BluetoothAdapter btAdapter;
-
     private ListView scannedListView;
     private ListView pairedListView;
     private Button scanButton;

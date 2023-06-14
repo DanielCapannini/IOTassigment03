@@ -14,7 +14,7 @@ public:
     run = true;
   }
 
-  virtual void tick() = 0;
+  virtual void run() = 0;
 
   bool updateTime(int period){
     timeElapsed += period;

@@ -11,9 +11,9 @@ class SmartRoom
 
 public:
   SmartRoom(ServoMotor* servoMotor, Led* led);
-  void setLedState(bool state);
-  bool getLedState();
   void setServoOpen(int percent);
   int getServoOpen();
+  void setLedState(bool state);
+  bool getLedState();
 };
 #endif

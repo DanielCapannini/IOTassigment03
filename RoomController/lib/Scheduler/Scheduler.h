@@ -7,9 +7,9 @@
 
 class Scheduler {
   unsigned long period;
+  unsigned long time;
   int _taskCount;
   Task* _tasks[MAX_TASKS];
-  unsigned long tempo;
 
 public:
   void init(unsigned long period);

@@ -6,7 +6,17 @@
 void Scheduler::init(unsigned long period) {
   this->period = period;
   _taskCount = 0;
-  tempo = millis();  
+  time = millis();  
+}
+
+void Scheduler::run() {   
+  while (millis() - time < period) {}
+    for (int i = 0; i < _taskCount; i++) {
+      if (_tasks[i]->updateTime(period)) {
+        _tasks[i]->run();
+      }
+    }
+  time = millis();
 }
 
 bool Scheduler::addTask(Task* task) {
@@ -19,12 +29,3 @@ bool Scheduler::addTask(Task* task) {
   }
 }
   
-void Scheduler::run() {   
-  while (millis() - tempo < period) {}
-    for (int i = 0; i < _taskCount; i++) {
-      if (_tasks[i]->updateTime(period)) {
-        _tasks[i]->tick();
-      }
-    }
-  tempo = millis();
-}

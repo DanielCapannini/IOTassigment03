@@ -7,14 +7,14 @@
 class Msg {
 
 private:
-    String msg;
+    String mes;
 
 public:
     Msg(String content) {
-        this->msg = content;
+        this->mes = content;
     }
     String getContent() {
-        return this->msg;
+        return this->mes;
     }
 };
 
@@ -25,10 +25,10 @@ public:
     void init();  
     void readSerial();
     void sendMsg(bool ledState, int servoOpening);
-    void sendMsg(String msg);
+    void sendMsg(String mes);
     bool isMessageAvailable();
     Msg* receiveMsg();
-    Msg* currentMsg;
+    Msg* currentMes;
     bool messageAvailable;
 };
 

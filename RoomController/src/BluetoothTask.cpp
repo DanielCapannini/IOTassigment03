@@ -8,10 +8,10 @@
 BluetoothTask::BluetoothTask(int rxPin, int txPin, MsgService* msg, SmartRoom* smartRoom, int dt) {
   this->txPin = txPin;
   this->rxPin = rxPin;
-  this->msg = msg;
-  this->smartRoom = smartRoom;
   this->dt = dt;
   this->ct = dt;
+  this->msg = msg;
+  this->smartRoom = smartRoom;
 }
   
 void BluetoothTask::init(int period){
@@ -20,18 +20,18 @@ void BluetoothTask::init(int period){
   channel->begin(9600);
 }
   
-void BluetoothTask::tick(){
+void BluetoothTask::run(){
   if(channel->available()){
+    String mes = "";
     this->ct = this->dt;
-    BTReceiving = true;
+    receiving = true;
     char msgChar = (char)channel->read();
-    String msg = "";
     while(msgChar != '\n'){
-      msg.concat(msgChar);
+      mes.concat(msgChar);
       msgChar = (char)channel->read();
     }
     StaticJsonDocument<64> doc;
-    deserializeJson(doc, msg);
+    deserializeJson(doc, mes);
     int servoOpening = doc["RollerBlinds"];
     if(doc["Lights"] ==  true) {
       smartRoom->setLedState(true);
@@ -43,7 +43,7 @@ void BluetoothTask::tick(){
   }
   else{
     if(this->ct == 0){
-      BTReceiving = false;
+      receiving = false;
     }
     else{
       this->ct--;

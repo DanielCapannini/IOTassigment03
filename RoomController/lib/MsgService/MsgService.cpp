@@ -6,7 +6,7 @@ void MsgService::readSerial() {
    while(Serial.available()) {
     char ch = (char)Serial.read();
     if (ch == '\n') {
-      this->currentMsg = new Msg(this->content);
+      this->currentMes = new Msg(this->content);
       this->messageAvailable = true;
     } else {
       this->content += ch;
@@ -19,7 +19,7 @@ void MsgService::init() {
     while (!Serial) {}
     this->content.reserve(256);
     this->content = "";
-    this->currentMsg = NULL;
+    this->currentMes = NULL;
     this->messageAvailable = false;
 }
 
@@ -31,8 +31,8 @@ void MsgService::sendMsg(bool ledState, int servoOpening) {
     Serial.println();
 }
 
-void MsgService::sendMsg(String msg) {
-    Serial.println(msg);
+void MsgService::sendMsg(String mes) {
+    Serial.println(mes);
 }
 
 bool MsgService::isMessageAvailable() {
@@ -41,11 +41,11 @@ bool MsgService::isMessageAvailable() {
 
 Msg* MsgService::receiveMsg() {
     if (this->isMessageAvailable()) {
-        Msg* msg = this->currentMsg;
+        Msg* mes = this->currentMes;
         this->messageAvailable = false;
-        this->currentMsg = NULL;
+        this->currentMes = NULL;
         content = "";
-        return msg;
+        return mes;
     } else {
         return NULL;
     }

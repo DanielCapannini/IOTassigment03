@@ -8,16 +8,13 @@
 class SerialTask : public Task {
   
   public: 
+    Msg* message;
+    SerialTask(SmartRoom* room, MsgService* msg);
     SmartRoom* room;
     MsgService* msg;
-    String content; 
-    Msg* message;
-
-    SerialTask(SmartRoom* room, MsgService* msg);   
-
-    
+    String content;    
     void init(int period);
-    void tick();
+    void run();
 
   protected: 
     void write(bool ledState, int servoOpening);

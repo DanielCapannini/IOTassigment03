@@ -15,14 +15,14 @@ void SmartRoom::setLedState(bool state)
   }
 }
 
-bool SmartRoom::getLedState()
-{
-  return led->isOn();
-}
-
 void SmartRoom::setServoOpen(int percent)
 {
   servoMotor->open(percent);
+}
+
+bool SmartRoom::getLedState()
+{
+  return led->isOn();
 }
 
 int SmartRoom::getServoOpen(){
